@@ -7,14 +7,10 @@ import Navigator from "./src/navigation/Navigator";
 export default function App() {
   return (
     <Provider store={store}>
-      {/* <NavigationContainer> */}
       <View style={styles.container}>
         <StatusBar style={"light"} />
         <Navigator />
-        {/* <HomeScreen /> */}
-        {/* <LoginScreen /> */}
       </View>
-      {/* </NavigationContainer> */}
     </Provider>
   );
 }
