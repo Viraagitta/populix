@@ -5,34 +5,17 @@ import {
   Text,
   Image,
   StyleSheet,
-  FlatList,
   ScrollView,
   ImageBackground,
-  Pressable,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { useDispatch, useSelector } from "react-redux";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useEffect, useState } from "react";
-import { getFetchList, getFetchMovie } from "../store/action";
-import MovieCard from "../components/MovieCard";
-import MovieList from "./MovieList";
-const HomeScreen = ({ navigation, id }) => {
-  const renderItem = ({ item }) => {
-    return <MovieCard movies={item} />;
-  };
-  const dispatch = useDispatch();
-
-  const movies = useSelector((state) => state.movies);
-  // console.log(movies.popularity, "<<");
-  useEffect(() => {
-    dispatch(getFetchList());
-  }, []);
+import ButtonList from "../components/ButtonList";
+const HomeScreen = ({ navigation }) => {
+  const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   return (
-    // <View style={styles.container}>
     <SafeAreaView style={[styles.container]}>
-      {/* <StatusBar style={"dark"} /> */}
       <View style={{ flexDirection: "row" }}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <ImageBackground
@@ -57,9 +40,15 @@ const HomeScreen = ({ navigation, id }) => {
             uri: "https://www.motionpictures.org/wp-content/uploads/2018/04/DaCUsjTWsAI5BPW.jpg",
           }}
         />
-        <MovieList id={1} />
         {/* <DetailPage /> */}
-        {/* </View> */}
+        <Text style={{ color: "white", textAlign: "center" }}>
+          MOVIE TMDB BY LIST
+        </Text>
+        <View style={styles.row}>
+          {list.map((button, i) => {
+            return <ButtonList button={button} key={i} />;
+          })}
+        </View>
       </ScrollView>
       <View style={{ flexDirection: "row" }}>
         <Ionicons
@@ -68,7 +57,6 @@ const HomeScreen = ({ navigation, id }) => {
           size={24}
           color="white"
         />
-
         <Image
           style={styles.footer}
           source={{
@@ -77,7 +65,6 @@ const HomeScreen = ({ navigation, id }) => {
         />
       </View>
     </SafeAreaView>
-    // </View>
   );
 };
 
@@ -91,6 +78,10 @@ const styles = StyleSheet.create({
     flex: 2,
     justifyContent: "center",
     backgroundColor: "white",
+  },
+  row: {
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   scrollView: {
     paddingTop: StatusBar.currentHeight,
@@ -124,7 +115,6 @@ const styles = StyleSheet.create({
   },
   footerBar: {
     marginTop: 16,
-    // marginBottom: 14,
     marginLeft: 18,
     width: 24,
     height: 30,

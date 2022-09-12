@@ -1,19 +1,11 @@
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import { Image, StatusBar, StyleSheet, View, Text } from "react-native";
+import { Image, StyleSheet, View, Text } from "react-native";
 
 export default function MovieCard({ movies }) {
   // console.log(movies.popularity, "<<card");
   const navigation = useNavigation();
   return (
-    <TouchableOpacity
-    // onPress={() => {
-    //   navigation.navigate("MovieDetail", {
-    //     id: movies.id,
-    //     name: movies.title,
-    //   });
-    // }}
-    >
+    <View>
       <View style={styles.container}>
         <Image
           style={styles.logo}
@@ -22,7 +14,7 @@ export default function MovieCard({ movies }) {
           }}
         />
       </View>
-    </TouchableOpacity>
+    </View>
   );
 }
 
@@ -30,13 +22,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#09273C",
-    flexDirection: "row",
-    // flexWrap: "wrap",
-    // flexDirection: "row",
-    // marginTop: 35,
-    // padding: 5,
-    // alignItems: "center",
-    justifyContent: "center",
   },
   text: {
     fontSize: 42,
@@ -45,7 +30,7 @@ const styles = StyleSheet.create({
   logo: {
     margin: 4,
     borderRadius: 12,
-    width: 100,
+    width: 98,
     height: 150,
   },
 });

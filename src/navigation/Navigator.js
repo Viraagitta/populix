@@ -1,14 +1,14 @@
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import HomeScreen from "../screens/HomeScreen";
-// import { TailwindProvider } from "tailwind-rn";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-// import MovieDetail from "../screens/MovieDetail";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StyleSheet } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import CustomDrawer from "../components/CustomDrawer";
+import MovieScreen from "../screens/MovieScreen";
+
 const Drawer = createDrawerNavigator();
 
 function Main() {
@@ -62,12 +62,12 @@ export default function Navigator() {
           component={Main}
           options={{ headerShown: false }}
         />
-        {/* <Stack.Screen
+        <Stack.Screen
           title="Back"
-          name="MovieDetail"
-          component={MovieDetail}
+          name="Movie List"
+          component={MovieScreen}
           options={({ route }) => ({ title: route.params?.name })}
-        /> */}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -79,8 +79,6 @@ const styles = StyleSheet.create({
     textColor: "white",
   },
   scrollView: {
-    // textColor: "white",
-    // flexDirection: 'row',
     paddingTop: StatusBar.currentHeight,
     marginHorizontal: 20,
   },

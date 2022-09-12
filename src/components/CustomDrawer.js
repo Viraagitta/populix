@@ -40,7 +40,7 @@ const CustomDrawer = (props) => {
           />
           <Text
             style={{
-              color: "navy",
+              color: "#191970",
               fontSize: 20,
               fontWeight: "bold",
               textAlign: "center",
