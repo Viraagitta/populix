@@ -42,10 +42,11 @@ function HomePage() {
                   ref={provider.innerRef}
                   {...provider.droppableProps}
                 >
-                  {survey?.map((data, i) => {
-                    return <TableRow data={data} key={i} i={i} />;
-                  })}
-
+                  {survey
+                    ? survey?.map((data, i) => {
+                        return <TableRow data={data} key={i} i={i} />;
+                      })
+                    : null}
                   {provider.placeholder}
                 </tbody>
               )}

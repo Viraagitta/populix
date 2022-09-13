@@ -19,7 +19,7 @@ export default function TableRow({ data, i }) {
           <td {...provider.dragHandleProps}> = </td>
           <td>{i + 1}</td>
           <td>{data.questions}</td>
-          <td>{must[0].answers}</td>
+          {must[0].answers ? <td>{must[0].answers}</td> : <td>{""}</td>}
           <td>
             {data.options.map((opt, i) => {
               return (

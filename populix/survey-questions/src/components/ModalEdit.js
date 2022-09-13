@@ -47,17 +47,24 @@ export default function ModalEdit({ i }) {
   const handleSave = (e) => {
     const newAnswerList = [...answerList];
     e.preventDefault();
-    let data = JSON.parse(localStorage.getItem("questionsAnswer"));
-    const removed = data.splice(i, 1);
-    localStorage.setItem("questionsAnswer", JSON.stringify(data));
-    const updateQuestions = JSON.parse(localStorage.getItem("questionsAnswer"));
-    localStorage.setItem(
-      "questionsAnswer",
-      JSON.stringify([
-        ...updateQuestions,
-        { questions: formSurvey.questions, options: newAnswerList },
-      ])
-    );
+    if (formSurvey.questions !== "") {
+      let data = JSON.parse(localStorage.getItem("questionsAnswer"));
+      const removed = data.splice(i, 1);
+      localStorage.setItem("questionsAnswer", JSON.stringify(data));
+      const updateQuestions = JSON.parse(
+        localStorage.getItem("questionsAnswer")
+      );
+      localStorage.setItem(
+        "questionsAnswer",
+        JSON.stringify([
+          ...updateQuestions,
+          { questions: formSurvey.questions, options: newAnswerList },
+        ])
+      );
+      handleClose();
+    } else {
+      handleClose();
+    }
   };
   return (
     <>
@@ -83,7 +90,6 @@ export default function ModalEdit({ i }) {
             </Form.Group>
             {answerList?.map((el, i) => {
               // console.log(el, "<rule");
-
               return (
                 <Form.Group
                   className="mb-3"
