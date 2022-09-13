@@ -8,30 +8,36 @@ export default function ModalEdit({ i }) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const options = [
-    { id: 1, name: "May Select" },
-    { id: 2, name: "Must Select" },
-  ];
+  const options = ["May Select", "Must Select"];
 
   const [formSurvey, setSurvey] = useState({});
+  const [answerList, setAnswerList] = useState([]);
 
-  const changeHandler = (e) => {
+  const changeHandler = (e, i) => {
     const { value, name } = e.target;
 
     setSurvey((prev) => {
       return { ...prev, [name]: value };
     });
+    // const newAnswerList = [...answerList];
+    // newAnswerList[i][name] = value;
+    // setAnswerList(newAnswerList);
+    setAnswerList((prev) => {
+      return { ...prev, [[i][name]]: value };
+    });
   };
+
   const saved = JSON.parse(localStorage.getItem("questionsAnswer"));
   useEffect(() => {
-    // saved[i];
     setSurvey({
       questions: saved[i].questions,
-      answers: saved[i].answers,
     });
+    const newAnswerList = saved[i].options;
+    setAnswerList(newAnswerList);
   }, []);
 
   const handleSave = (e) => {
+    const newAnswerList = [...answerList];
     e.preventDefault();
     let data = JSON.parse(localStorage.getItem("questionsAnswer"));
     const removed = data.splice(i, 1);
@@ -41,7 +47,7 @@ export default function ModalEdit({ i }) {
       "questionsAnswer",
       JSON.stringify([
         ...updateQuestions,
-        { questions: formSurvey.questions, answers: formSurvey.answers },
+        { questions: formSurvey.questions, options: newAnswerList },
       ])
     );
   };
@@ -52,7 +58,7 @@ export default function ModalEdit({ i }) {
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Update Questions</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -67,120 +73,46 @@ export default function ModalEdit({ i }) {
                 onChange={changeHandler}
               />
             </Form.Group>
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
-            >
-              <Form.Label>Example Answer 1</Form.Label>
-              <Form.Select
-                aria-label="Default select example"
-                name="options"
-                value={formSurvey.answers}
-                onChange={changeHandler}
-              >
-                {options.map((opt, i) => {
-                  return (
-                    <option key={i} value={opt.id} onChange={changeHandler}>
-                      {opt.name}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-              <Form.Control
-                type="text"
-                placeholder="your answers"
-                // autoFocus
-                name="answers"
-                value={formSurvey.answers}
-                onChange={changeHandler}
-                as="textarea"
-                rows={3}
-              />
-            </Form.Group>
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
-            >
-              <Form.Label>Example Answer 2</Form.Label>
-              <Form.Select
-                aria-label="Default select example"
-                name="options"
-                onChange={changeHandler}
-              >
-                {options.map((opt, i) => {
-                  return (
-                    <option key={i} value={opt.id} onChange={changeHandler}>
-                      {opt.name}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-              <Form.Control
-                type="text"
-                placeholder="your answers"
-                autoFocus
-                name="answers"
-                onChange={changeHandler}
-                as="textarea"
-                rows={3}
-              />
-            </Form.Group>
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
-            >
-              <Form.Label>Example Answer 3</Form.Label>
-              <Form.Select
-                aria-label="Default select example"
-                name="options"
-                onChange={changeHandler}
-              >
-                {options.map((opt, i) => {
-                  return (
-                    <option key={i} value={opt.id} onChange={changeHandler}>
-                      {opt.name}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-              <Form.Control
-                type="text"
-                placeholder="your answers"
-                autoFocus
-                name="answers"
-                onChange={changeHandler}
-                as="textarea"
-                rows={3}
-              />
-            </Form.Group>
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
-            >
-              <Form.Label>Example Answer 4</Form.Label>
-              <Form.Select
-                aria-label="Default select example"
-                name="options"
-                onChange={changeHandler}
-              >
-                {options.map((opt, i) => {
-                  return (
-                    <option key={i} value={opt.id} onChange={changeHandler}>
-                      {opt.name}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-              <Form.Control
-                type="text"
-                placeholder="your answers"
-                autoFocus
-                name="answers"
-                onChange={changeHandler}
-                as="textarea"
-                rows={3}
-              />
-            </Form.Group>
+            {saved[i].options?.map((el, i) => {
+              // console.log(el, "<rule");
+              return (
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlTextarea1"
+                >
+                  <Form.Label>Answer Options</Form.Label>
+                  <Form.Select
+                    aria-label="Default select example"
+                    name="rules"
+                    value={answerList.rules}
+                    onChange={changeHandler}
+                  >
+                    {options.map((opt, i) => {
+                      return (
+                        <option
+                          key={i}
+                          value={opt}
+                          selected={el.rules === opt}
+                          // diables={el.rules === opt}
+                        >
+                          {opt}
+                        </option>
+                      );
+                    })}
+                  </Form.Select>
+                  <Form.Control
+                    type="text"
+                    placeholder="your answers"
+                    // autoFocus
+                    name="answers"
+                    value={el.answers}
+                    onChange={changeHandler}
+                    as="textarea"
+                    rows={3}
+                  />
+                </Form.Group>
+              );
+            })}
           </Form>
         </Modal.Body>
         <Modal.Footer>

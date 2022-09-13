@@ -4,10 +4,10 @@ import ModalForm from "../components/ModalForm";
 import TableRow from "../components/TableRow";
 
 function HomePage() {
+  const saved = JSON.parse(localStorage.getItem("questionsAnswer"));
   useEffect(() => {
     localStorage.getItem("questionsAnswer");
-  }, []);
-  const saved = JSON.parse(localStorage.getItem("questionsAnswer"));
+  }, [saved]);
   // console.log(saved[0]);
   return (
     <>
@@ -15,9 +15,10 @@ function HomePage() {
       <Table striped>
         <thead>
           <tr>
-            <th>TEST</th>
+            <th>No.</th>
             <th>Questions</th>
             <th>Must Answer</th>
+            <th>Respondent Options</th>
             <th>Action</th>
           </tr>
         </thead>
