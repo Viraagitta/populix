@@ -9,20 +9,24 @@ export default function ModalForm() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [isDisabled, setIsDisabled] = useState(false);
-
   const options = ["May Select", "Must Select"];
 
   const [formSurvey, setSurvey] = useState({
     questions: "",
   });
 
-  const [answerList, setAnswerList] = useState([
-    {
-      rules: "May Select",
-      answers: "",
-    },
-  ]);
+  const [answerList, setAnswerList] = useState(
+    [
+      {
+        rules: "May Select",
+        answers: "",
+      },
+    ]
+    // () => {
+    //   const localData = JSON.parse(localStorage.getItem("questionsAnswer"));
+    //   return localData ? localData : [];
+    // }
+  );
   const changeQuestionsHandler = (e, i) => {
     const { value, name } = e.target;
 
@@ -77,14 +81,6 @@ export default function ModalForm() {
       alert("Questions must not be empty!");
     }
   };
-
-  useEffect(() => {
-    if (answerList.length > 0) {
-      answerList[answerList.length - 1].answers === ""
-        ? setIsDisabled(true)
-        : setIsDisabled(false);
-    }
-  }, []);
 
   const handleListAdd = () => {
     setAnswerList([

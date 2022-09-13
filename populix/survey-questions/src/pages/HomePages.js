@@ -8,10 +8,28 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function HomePage() {
   const saved = JSON.parse(localStorage.getItem("questionsAnswer"));
   const [survey = [], setSurvey] = useState(saved);
+  // const [userData, setUserData] = useState("default user data");
+
   // useEffect(() => {
-  //   localStorage.getItem("questionsAnswer");
-  // }, [survey]);
-  // console.log(saved[0]);
+  //   function checkUserData() {
+  //     const item = localStorage.getItem("questionsAnswer");
+
+  //     // here examines external data
+  //     if (item) {
+  //       setUserData(item);
+  //     } else {
+  //       // if it does not exist, a default value is assigned
+  //       setUserData("Default Value");
+  //     }
+  //   }
+  //   checkUserData();
+
+  //   window.addEventListener("storage", checkUserData);
+
+  //   return () => {
+  //     window.removeEventListener("storage", checkUserData);
+  //   };
+  // }, []);
   const handleDragEnd = (e) => {
     if (!e.destination) return;
     let tempData = Array.from(survey);
