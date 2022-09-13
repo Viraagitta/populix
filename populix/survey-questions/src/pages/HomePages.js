@@ -1,34 +1,76 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import ModalForm from "../components/ModalForm";
 import TableRow from "../components/TableRow";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function HomePage() {
-  useEffect(() => {
-    localStorage.getItem("questionsAnswer");
-  }, []);
   const saved = JSON.parse(localStorage.getItem("questionsAnswer"));
-  // console.log(saved[0]);
+  const [survey = [], setSurvey] = useState(saved);
+  // const [userData, setUserData] = useState("default user data");
+
+  // useEffect(() => {
+  //   function checkUserData() {
+  //     const item = localStorage.getItem("questionsAnswer");
+
+  //     // here examines external data
+  //     if (item) {
+  //       setUserData(item);
+  //     } else {
+  //       // if it does not exist, a default value is assigned
+  //       setUserData("Default Value");
+  //     }
+  //   }
+  //   checkUserData();
+
+  //   window.addEventListener("storage", checkUserData);
+
+  //   return () => {
+  //     window.removeEventListener("storage", checkUserData);
+  //   };
+  // }, []);
+  const handleDragEnd = (e) => {
+    if (!e.destination) return;
+    let tempData = Array.from(survey);
+    let [source_data] = tempData.splice(e.source.index, 1);
+    tempData.splice(e.destination.index, 0, source_data);
+    setSurvey(tempData);
+  };
   return (
     <>
-      <ModalForm />
-      <Table striped>
-        <thead>
-          <tr>
-            <th>TEST</th>
-            <th>Questions</th>
-            <th>Must Answer</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {saved
-            ? saved.map((data, i) => {
-                return <TableRow data={data} key={i} i={i} />;
-              })
-            : null}
-        </tbody>
-      </Table>
+      <div className="App mt-4">
+        <ModalForm />
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Table hover variant="primary">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Questions</th>
+                <th>Must Answer</th>
+                <th>Respondent Options</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <Droppable droppableId="droppable-1">
+              {(provider) => (
+                <tbody
+                  className="text-capitalize"
+                  ref={provider.innerRef}
+                  {...provider.droppableProps}
+                >
+                  {survey
+                    ? survey?.map((data, i) => {
+                        return <TableRow data={data} key={i} i={i} />;
+                      })
+                    : null}
+                  {provider.placeholder}
+                </tbody>
+              )}
+            </Droppable>
+          </Table>
+        </DragDropContext>
+      </div>
     </>
   );
 }

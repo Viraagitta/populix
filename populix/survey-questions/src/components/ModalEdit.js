@@ -8,42 +8,63 @@ export default function ModalEdit({ i }) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const options = [
-    { id: 1, name: "May Select" },
-    { id: 2, name: "Must Select" },
-  ];
+  const options = ["May Select", "Must Select"];
 
   const [formSurvey, setSurvey] = useState({});
+  const [answerList, setAnswerList] = useState([]);
 
-  const changeHandler = (e) => {
+  const changeHandler = (e, i) => {
     const { value, name } = e.target;
+    const [id, type] = name.split(":");
 
+    setAnswerList((prev) => {
+      return prev.map((el, i) => {
+        if (i == id) {
+          return { ...el, [type]: value };
+        } else {
+          return el;
+        }
+      });
+    });
+  };
+  // console.log(answerList);
+  const changeSurvey = (e) => {
+    const { value, name } = e.target;
     setSurvey((prev) => {
       return { ...prev, [name]: value };
     });
   };
+
   const saved = JSON.parse(localStorage.getItem("questionsAnswer"));
   useEffect(() => {
-    // saved[i];
     setSurvey({
       questions: saved[i].questions,
-      answers: saved[i].answers,
     });
+    const newAnswerList = saved[i].options;
+    setAnswerList(newAnswerList);
   }, []);
 
   const handleSave = (e) => {
+    const newAnswerList = [...answerList];
     e.preventDefault();
-    let data = JSON.parse(localStorage.getItem("questionsAnswer"));
-    const removed = data.splice(i, 1);
-    localStorage.setItem("questionsAnswer", JSON.stringify(data));
-    const updateQuestions = JSON.parse(localStorage.getItem("questionsAnswer"));
-    localStorage.setItem(
-      "questionsAnswer",
-      JSON.stringify([
-        ...updateQuestions,
-        { questions: formSurvey.questions, answers: formSurvey.answers },
-      ])
-    );
+    if (formSurvey.questions !== "") {
+      let data = JSON.parse(localStorage.getItem("questionsAnswer"));
+      const removed = data.splice(i, 1);
+      localStorage.setItem("questionsAnswer", JSON.stringify(data));
+      const updateQuestions = JSON.parse(
+        localStorage.getItem("questionsAnswer")
+      );
+      localStorage.setItem(
+        "questionsAnswer",
+        JSON.stringify([
+          ...updateQuestions,
+          { questions: formSurvey.questions, options: newAnswerList },
+        ])
+      );
+      handleClose();
+    } else {
+      handleClose();
+    }
   };
   return (
     <>
@@ -52,7 +73,7 @@ export default function ModalEdit({ i }) {
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Update Questions</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -64,123 +85,50 @@ export default function ModalEdit({ i }) {
                 placeholder="your questions"
                 autoFocus
                 name="questions"
-                onChange={changeHandler}
+                onChange={changeSurvey}
               />
             </Form.Group>
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
-            >
-              <Form.Label>Example Answer 1</Form.Label>
-              <Form.Select
-                aria-label="Default select example"
-                name="options"
-                value={formSurvey.answers}
-                onChange={changeHandler}
-              >
-                {options.map((opt, i) => {
-                  return (
-                    <option key={i} value={opt.id} onChange={changeHandler}>
-                      {opt.name}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-              <Form.Control
-                type="text"
-                placeholder="your answers"
-                // autoFocus
-                name="answers"
-                value={formSurvey.answers}
-                onChange={changeHandler}
-                as="textarea"
-                rows={3}
-              />
-            </Form.Group>
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
-            >
-              <Form.Label>Example Answer 2</Form.Label>
-              <Form.Select
-                aria-label="Default select example"
-                name="options"
-                onChange={changeHandler}
-              >
-                {options.map((opt, i) => {
-                  return (
-                    <option key={i} value={opt.id} onChange={changeHandler}>
-                      {opt.name}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-              <Form.Control
-                type="text"
-                placeholder="your answers"
-                autoFocus
-                name="answers"
-                onChange={changeHandler}
-                as="textarea"
-                rows={3}
-              />
-            </Form.Group>
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
-            >
-              <Form.Label>Example Answer 3</Form.Label>
-              <Form.Select
-                aria-label="Default select example"
-                name="options"
-                onChange={changeHandler}
-              >
-                {options.map((opt, i) => {
-                  return (
-                    <option key={i} value={opt.id} onChange={changeHandler}>
-                      {opt.name}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-              <Form.Control
-                type="text"
-                placeholder="your answers"
-                autoFocus
-                name="answers"
-                onChange={changeHandler}
-                as="textarea"
-                rows={3}
-              />
-            </Form.Group>
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
-            >
-              <Form.Label>Example Answer 4</Form.Label>
-              <Form.Select
-                aria-label="Default select example"
-                name="options"
-                onChange={changeHandler}
-              >
-                {options.map((opt, i) => {
-                  return (
-                    <option key={i} value={opt.id} onChange={changeHandler}>
-                      {opt.name}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-              <Form.Control
-                type="text"
-                placeholder="your answers"
-                autoFocus
-                name="answers"
-                onChange={changeHandler}
-                as="textarea"
-                rows={3}
-              />
-            </Form.Group>
+            {answerList?.map((el, i) => {
+              // console.log(el, "<rule");
+              return (
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlTextarea1"
+                  key={i}
+                >
+                  <Form.Label>Answer Options</Form.Label>
+                  <Form.Select
+                    aria-label="Default select example"
+                    name={`${i}:rules`}
+                    value={el.rules}
+                    onChange={changeHandler}
+                  >
+                    {options.map((opt, i) => {
+                      return (
+                        <option
+                          key={i}
+                          value={opt}
+                          selected={el.rules === opt}
+                          // diables={el.rules === opt}
+                        >
+                          {opt}
+                        </option>
+                      );
+                    })}
+                  </Form.Select>
+                  <Form.Control
+                    type="text"
+                    placeholder="your answers"
+                    // autoFocus
+                    name={`${i}:answers`}
+                    value={el.answers}
+                    onChange={changeHandler}
+                    as="textarea"
+                    rows={3}
+                  />
+                </Form.Group>
+              );
+            })}
           </Form>
         </Modal.Body>
         <Modal.Footer>
