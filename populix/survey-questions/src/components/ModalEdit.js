@@ -27,7 +27,7 @@ export default function ModalEdit({ i }) {
       });
     });
   };
-  console.log(answerList);
+  // console.log(answerList);
   const changeSurvey = (e) => {
     const { value, name } = e.target;
     setSurvey((prev) => {

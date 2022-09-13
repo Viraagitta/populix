@@ -10,7 +10,7 @@ function HomePage() {
   const [survey = [], setSurvey] = useState(saved);
   // useEffect(() => {
   //   localStorage.getItem("questionsAnswer");
-  // }, [saved]);
+  // }, [survey]);
   // console.log(saved[0]);
   const handleDragEnd = (e) => {
     if (!e.destination) return;
@@ -24,10 +24,9 @@ function HomePage() {
       <div className="App mt-4">
         <ModalForm />
         <DragDropContext onDragEnd={handleDragEnd}>
-          <Table striped>
+          <Table hover variant="primary">
             <thead>
               <tr>
-                <th />
                 <th>No.</th>
                 <th>Questions</th>
                 <th>Must Answer</th>
