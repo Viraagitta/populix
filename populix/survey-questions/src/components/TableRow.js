@@ -1,5 +1,6 @@
 import Button from "react-bootstrap/Button";
 import ModalEdit from "./ModalEdit";
+import { Draggable } from "react-beautiful-dnd";
 
 export default function TableRow({ data, i }) {
   const handleDelete = (e, i) => {
@@ -10,31 +11,35 @@ export default function TableRow({ data, i }) {
   };
   let must = data.options.filter((opt) => opt.rules === "Must Select");
   // console.log(must, "?");
+
   return (
-    <>
-      <tr>
-        <td>{i + 1}</td>
-        <td>{data.questions}</td>
-        <td>{must[0].answers}</td>
-        {data.options.map((opt, i) => {
-          return (
-            <>
-              <div>
-                {i + 1}. {opt.answers}
-              </div>
-            </>
-          );
-        })}
-        <td>
-          <ModalEdit i={i} />
-          <Button
-            onClick={(e) => handleDelete(e, i)}
-            style={{ marginLeft: 30 }}
-          >
-            Delete Question
-          </Button>
-        </td>
-      </tr>
-    </>
+    <Draggable key={data.questions} draggableId={data.questions} index={i}>
+      {(provider) => (
+        <tr {...provider.draggableProps} ref={provider.innerRef}>
+          <td {...provider.dragHandleProps}> = </td>
+          <td>{i + 1}</td>
+          <td>{data.questions}</td>
+          <td>{must[0].answers}</td>
+          <td>
+            {data.options.map((opt, i) => {
+              return (
+                <div key={i}>
+                  {i + 1}. {opt.answers}
+                </div>
+              );
+            })}
+          </td>
+          <td>
+            <ModalEdit i={i} />
+            <Button
+              onClick={(e) => handleDelete(e, i)}
+              style={{ marginLeft: 30 }}
+            >
+              Delete Question
+            </Button>
+          </td>
+        </tr>
+      )}
+    </Draggable>
   );
 }

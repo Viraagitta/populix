@@ -122,6 +122,7 @@ export default function ModalForm() {
                   <Form.Group
                     className="mb-3"
                     controlId="exampleForm.ControlTextarea1"
+                    key={i}
                   >
                     <Form.Label>Answer Options</Form.Label>
                     <Form.Select

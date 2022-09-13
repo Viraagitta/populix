@@ -15,15 +15,23 @@ export default function ModalEdit({ i }) {
 
   const changeHandler = (e, i) => {
     const { value, name } = e.target;
+    const [id, type] = name.split(":");
 
+    setAnswerList((prev) => {
+      return prev.map((el, i) => {
+        if (i == id) {
+          return { ...el, [type]: value };
+        } else {
+          return el;
+        }
+      });
+    });
+  };
+  console.log(answerList);
+  const changeSurvey = (e) => {
+    const { value, name } = e.target;
     setSurvey((prev) => {
       return { ...prev, [name]: value };
-    });
-    // const newAnswerList = [...answerList];
-    // newAnswerList[i][name] = value;
-    // setAnswerList(newAnswerList);
-    setAnswerList((prev) => {
-      return { ...prev, [[i][name]]: value };
     });
   };
 
@@ -70,21 +78,23 @@ export default function ModalEdit({ i }) {
                 placeholder="your questions"
                 autoFocus
                 name="questions"
-                onChange={changeHandler}
+                onChange={changeSurvey}
               />
             </Form.Group>
-            {saved[i].options?.map((el, i) => {
+            {answerList?.map((el, i) => {
               // console.log(el, "<rule");
+
               return (
                 <Form.Group
                   className="mb-3"
                   controlId="exampleForm.ControlTextarea1"
+                  key={i}
                 >
                   <Form.Label>Answer Options</Form.Label>
                   <Form.Select
                     aria-label="Default select example"
-                    name="rules"
-                    value={answerList.rules}
+                    name={`${i}:rules`}
+                    value={el.rules}
                     onChange={changeHandler}
                   >
                     {options.map((opt, i) => {
@@ -104,7 +114,7 @@ export default function ModalEdit({ i }) {
                     type="text"
                     placeholder="your answers"
                     // autoFocus
-                    name="answers"
+                    name={`${i}:answers`}
                     value={el.answers}
                     onChange={changeHandler}
                     as="textarea"
